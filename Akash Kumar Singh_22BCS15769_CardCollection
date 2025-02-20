@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class CardCollection {
+    public static void main(String[] args) {
+        Map<String, List<String>> cards = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n1. Add Card\n2. Display Cards\n3. Find Cards by Symbol\n4. Exit");
+            System.out.print("Enter choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Symbol (Hearts, Diamonds, etc.): ");
+                    String symbol = scanner.nextLine();
+                    System.out.print("Enter Card Value (Ace, King, 10, etc.): ");
+                    String value = scanner.nextLine();
+                    
+                    cards.putIfAbsent(symbol, new ArrayList<>());
+                    cards.get(symbol).add(value);
+                    break;
+                    
+                case 2:
+                    for (var entry : cards.entrySet()) {
+                        System.out.println(entry.getKey() + ": " + entry.getValue());
+                    }
+                    break;
+                    
+                case 3:
+                    System.out.print("Enter Symbol to search: ");
+                    String searchSymbol = scanner.nextLine();
+                    System.out.println(cards.getOrDefault(searchSymbol, Collections.emptyList()));
+                    break;
+                    
+                case 4:
+                    System.out.println("Exiting...");
+                    break;
+                    
+                default:
+                    System.out.println("Invalid Choice!");
+            }
+        } while (choice != 4);
+
+        scanner.close();
+    }
+}
