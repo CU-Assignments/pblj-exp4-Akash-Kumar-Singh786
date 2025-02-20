@@ -1,0 +1,46 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+class TicketBooking implements Runnable {
+    private static int availableSeats = 10;
+    private static final Lock lock = new ReentrantLock();
+    private String passengerName;
+    private int priority;
+
+    TicketBooking(String passengerName, int priority) {
+        this.passengerName = passengerName;
+        this.priority = priority;
+    }
+
+    public void run() {
+        try {
+            lock.lock();
+            if (availableSeats > 0) {
+                System.out.println(passengerName + " booked a seat. Remaining seats: " + (--availableSeats));
+            } else {
+                System.out.println(passengerName + " could not book a seat. No seats available.");
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+public class TicketBookingSystem {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new TicketBooking("VIP-1", 10));
+        Thread t2 = new Thread(new TicketBooking("VIP-2", 9));
+        Thread t3 = new Thread(new TicketBooking("User-1", 5));
+        Thread t4 = new Thread(new TicketBooking("User-2", 4));
+
+        t1.setPriority(10);
+        t2.setPriority(9);
+        t3.setPriority(5);
+        t4.setPriority(4);
+
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+    }
+}
